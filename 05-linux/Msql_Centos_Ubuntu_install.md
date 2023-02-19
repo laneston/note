@@ -5,7 +5,7 @@
 
 下载 Mysql 安装包，下载连接：https://downloads.mysql.com/archives/community/
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-Msql_Centos_Ubuntu_install/mysql_download1.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Msql_Centos_Ubuntu_install/mysql_download1.jpg"></div>
 
 
 目前使用的版本是： 5.7.32 下载时有带 boost 库的，也有不带 boost 库的，对本次编译的差别不大，本次编译选用的是不带 boost 的，会在编译的过程中自己下载相应的文件。
@@ -22,14 +22,14 @@ cmake . -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/home/mysql-5.7.32/boost -DCMAKE_INSTALL
 2. -DWITH_BOOST=/home/mysql-5.7.32/boost 表示BOOST 文件的下载路径；
 3. -DCMAKE_INSTALL_PREFIX=/home/mysql-5.7.32/__install 表示编译完毕后的 mysql 文件安装的路径。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-Msql_Centos_Ubuntu_install/mysql_download2.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Msql_Centos_Ubuntu_install/mysql_download2.jpg"></div>
 
 
 如果出现警告，则按相应提示进行软件的安装。
 
 准备完毕后，输入 make 进行编译，编译完毕后，输入 make install进行安装，那么相关文件都会在刚才指定的 __install 目录下。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-Msql_Centos_Ubuntu_install/mysql_download3.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Msql_Centos_Ubuntu_install/mysql_download3.jpg"></div>
 
 ## 安装
 
@@ -74,7 +74,7 @@ root@Lance-PC:/usr/local# chown -R mysql:mysql mysql
 
 ```
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-Msql_Centos_Ubuntu_install/mysql_download4.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Msql_Centos_Ubuntu_install/mysql_download4.jpg"></div>
 
 
 ### 添加配置文件
@@ -177,7 +177,7 @@ service mysqld start
 mysql -u root -p
 ```
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-Msql_Centos_Ubuntu_install/mysql_download5.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Msql_Centos_Ubuntu_install/mysql_download5.jpg"></div>
 
 连接过程中可能会出现以上情况。
 
@@ -186,9 +186,9 @@ mysql -u root -p
 将 my.cnf 中 skip-grant-tables 语句的注释取消，执行 /etc/init.d/mysqld restart 重启 mysql。此时可以不输密码进入数据库，输入 mysql -u root -p 后按回车即可。
 
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-Msql_Centos_Ubuntu_install/mysql_download6.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Msql_Centos_Ubuntu_install/mysql_download6.jpg"></div>
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-Msql_Centos_Ubuntu_install/mysql_download7.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Msql_Centos_Ubuntu_install/mysql_download7.jpg"></div>
 
 
 可以看到 root 用户没有设置密码，这个原因导致了这个错误。

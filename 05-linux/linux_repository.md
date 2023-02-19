@@ -2,7 +2,7 @@
 
 # centos
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/HUAWEI_repository/HUAWEI_repository.png"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/HUAWEI_repository/HUAWEI_repository.png"></div>
 
 ## 备份配置文件
 

@@ -194,7 +194,7 @@ DMA控制器通过AHB主从接口与核心和存储器接口。AHB主接口控�
 
 注：使用以太网时，AHB时钟频率必须至少为25 MHz。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/ETH%20block%20diagram.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/ETH%20block%20diagram.jpg"></div>
 
 <h3 id="Station management interface"> Station management interface: SMI </h3>
 
@@ -216,19 +216,19 @@ RMII在MAC和PHY之间实例化。这有助于将MAC的MII转换为RMII。RMII�
 
 - 它提供独立的2位宽（dibit）的传输和接收数据路径。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/Reduced%20media-independent%20interface%20signals.png"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/Reduced%20media-independent%20interface%20signals.png"></div>
 
 <h3 id="RMII clock sources"> RMII clock sources </h3>
 
 从外部50MHz时钟对PHY进行时钟，或者使用带有嵌入式PLL的PHY来生成50MHz频率。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/RMII%20clock%20sources.png"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/RMII%20clock%20sources.png"></div>
 
 <h3 id="MII/RMII selection"> MII/RMII selection </h3>
 
 模式MII或RMII是使用SYSCFG_PMC寄存器中的配置位23 MII_RMII_SEL来选择的。当以太网控制器处于重置状态或启用时钟之前，应用程序必须设置MII/RMII模式。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/Clock%20scheme.png"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/Clock%20scheme.png"></div>
 
 为了节省一个引脚，两个输入时钟信号RMII_REF_CK和MII_RX_CLK被多路复用在同一个GPIO管脚上。
 
@@ -270,9 +270,9 @@ MAC子层执行与数据链路控制过程相关联的以下功能：
 
 MAC块实现IEEE 802.3-2002标准指定的MAC子层和可选MAC控制子层（10/100mbit/s）。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/MAC%20frame%20format.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/MAC%20frame%20format.jpg"></div>
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/Tagged%20MAC%20frame%20format.png"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/Tagged%20MAC%20frame%20format.png"></div>
 
 为使用CSMA/CD MAC的数据通信系统指定了两种帧格式：
 
@@ -288,7 +288,7 @@ MAC块实现IEEE 802.3-2002标准指定的MAC子层和可选MAC控制子层（10
 
 3. 目的地和源地址字段：6字节字段，表示目的地和源站地址，如下所示）：
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/Address%20field%20format.png"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/Address%20field%20format.png"></div>
 
 - 每个地址的长度为48位。
 
@@ -336,7 +336,7 @@ MAC块实现IEEE 802.3-2002标准指定的MAC子层和可选MAC控制子层（10
 
 6. 帧检查序列：包含循环冗余检查（CRC）值的4字节字段。CRC计算基于以下字段：源地址、目标地址、QTag前缀、长度/类型、LLC数据和PAD（即除前导码、SFD之外的所有字段）。生成多项式如下：
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/Formula_20200702A.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/Formula_20200702A.jpg"></div>
 
 帧的CRC值计算如下：
 
@@ -380,7 +380,7 @@ DMA控制传输路径的所有事务。从系统存储器读取的以太网帧�
 
 CRC生成器计算以太网帧的FCS字段的32位CRC。编码由以下多项式定义。
 
- <div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/Formula_20200702A.jpg"></div>
+ <div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/Formula_20200702A.jpg"></div>
 
 <h3 id="Transmit protocol"> Transmit protocol </h3>
 
@@ -464,11 +464,11 @@ TCP和UDP等通信协议实现校验和字段，这有助于确定通过网络�
 
 每个来自MII的半字节在RMII上发送出去，一次两位，其传输顺序如下图所示。低阶位（D1和D0）首先传输，然后传输高阶位（D2和D3）。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/Transmission%20bit%20order.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/Transmission%20bit%20order.jpg"></div>
 
 下图是RMII的帧传输。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/Frame%20transmission%20in%20MMI%20and%20RMII%20modes.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/Frame%20transmission%20in%20MMI%20and%20RMII%20modes.jpg"></div>
 
 <h1 id="MAC frame reception">MAC frame reception</h1>
 
@@ -539,7 +539,7 @@ DMA发送器从STM32F4xx内存的接收buffer中接收数据帧，从STM32F4xx�
 
 数据缓冲区位于主机的物理内存空间中，由整个帧或帧的一部分组成，但不能超过单个帧。缓冲区只包含数据。缓冲区状态在描述符中保持。数据链是指跨越多个数据缓冲区的帧。但是，一个描述符不能跨越多个帧。当检测到帧结束时，DMA跳到下一帧缓冲区。数据链可以呗启用或禁用。描述符环和链结构如下图所示。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/Descriptor%20ring%20and%20chain%20structure.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/Descriptor%20ring%20and%20chain%20structure.jpg"></div>
 
 <h3 id="Initialization of a transfer using DMA"> Initialization of a transfer using DMA </h3>
 
@@ -617,7 +617,7 @@ DMA内部的仲裁器负责AHB主接口的发送和接收通道访问之间的�
 8. 传输中断（ETH_DMASR寄存器[0]）是在完成帧的传输后设置的，该帧在其最后一个描述符中设置了完成时中断（TDES1[31]）。
 9. 在挂起状态下，DMA在接收到发送轮询请求时尝试重新获取描述符（并因此返回到步骤3），下溢中断状态位被清除。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/TxDMA%20operation%20in%20Default%20mode.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/TxDMA%20operation%20in%20Default%20mode.jpg"></div>
 
 <h5 id="OSF mode"> TxDMA operation: OSF mode </h5>
 
@@ -632,7 +632,7 @@ DMA内部的仲裁器负责AHB主接口的发送和接收通道访问之间的�
 7. 在挂起模式下，如果DMA接收到挂起的状态和时间戳，它会将时间戳（如果对当前帧启用）写入TDES2和TDES3，然后将状态写入相应的TDES0。然后设置相关的中断并返回到挂起模式。
 8. DMA只有在接收到传输轮询请求（ETH_DMATPDR寄存器）后才能退出挂起模式并进入运行状态（根据挂起状态转到步骤1或步骤2）。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xxP_Ether/TxDMA%20operation%20in%20OSF%20mode.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xxP_Ether/TxDMA%20operation%20in%20OSF%20mode.jpg"></div>
 
 <h3 id="Transmit frame processing"> Transmit frame processing </h3>
 

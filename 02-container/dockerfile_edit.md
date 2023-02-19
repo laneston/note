@@ -22,7 +22,7 @@
 可以在 [dockerhub](https://hub.docker.com/) 网站上下载所需的基础镜像，然后启动容器，进入容器，在容器中安装所需的工具，再使用
 docker commit 打包成新的镜像。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-dockerfile/dockerImg.png"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-dockerfile/dockerImg.png"></div>
 
 上图中，none 是打包时构造的中间镜像；edge-harbor.iotbi.cc:9443/kubetest/podtest:v1是制作的目标镜像；gcc:cmake是基于gcc:latest制作的基础镜像，用于提供编译环境；Ubuntu:latest是用作打包的基础镜像。
 

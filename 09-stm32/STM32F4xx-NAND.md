@@ -156,7 +156,7 @@ FSMC中实现的纠错码（ECC）算法可以对从 NAND Flash 读写的256、5
 
 下图显示了参数的定义：
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xx_NAND/NAND%20controller%20timing%20for%20common%20memory%20access.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xx_NAND/NAND%20controller%20timing%20for%20common%20memory%20access.jpg"></div>
 
 1.	在写入访问期间，NOE保持高（非活动）。在读取访问期间，NWE保持高（非活动）。
 2.	对于写访问，保持阶段延迟为（MEMHOLD）x HCLK周期，而对于读访问，保持阶段延迟为（MEMHOLD+2）x HCLK周期。
@@ -165,7 +165,7 @@ FSMC中实现的纠错码（ECC）算法可以对从 NAND Flash 读写的256、5
 
 一些 NAND Flash 设备要求在写入最后一部分地址后，控制器等待 R/NB 信号电平变低[busy signal]。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xx_NAND/Access%20to%20non%20%E2%80%98CE%20don%E2%80%99t%20care%E2%80%99%20NAND-Flash.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xx_NAND/Access%20to%20non%20%E2%80%98CE%20don%E2%80%99t%20care%E2%80%99%20NAND-Flash.jpg"></div>
 
 1. CPU在地址 0x7001 0000 写字节 0x00;
 2. CPU在地址 0x7002 0000 写字节 A7-A0;
@@ -459,7 +459,7 @@ MX30LF1G18AC 由64页（2048+64）字节组成，采用两个NAND字符串结构
 
 <h3 id="Timing Configuration"> Timing Configuration </h3>
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-STM32F4xx_NAND/AC%20Waveforms%20for%20Command-Address-Data%20Latch%20Timing.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-STM32F4xx_NAND/AC%20Waveforms%20for%20Command-Address-Data%20Latch%20Timing.jpg"></div>
 
 上图是项目所用到的NAND Flash MX30LF1G18AC的 Address Input/Command Input/Data Input时序图。图中标注意义如下：
 

@@ -2,7 +2,7 @@ MII即“媒体独立接口”，也叫“独立于介质的接口”。它是IE
 
 # MII
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Ethernet_EVB_Hardware_Note/MII.jpg" width="50%" height="50%"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Ethernet_EVB_Hardware_Note/MII.jpg" width="50%" height="50%"></div>
 
 
 引脚说明如下：
@@ -20,7 +20,7 @@ MII即“媒体独立接口”，也叫“独立于介质的接口”。它是IE
 
 # RMII
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Ethernet_EVB_Hardware_Note/RMII.jpg" width="50%" height="50%"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Ethernet_EVB_Hardware_Note/RMII.jpg" width="50%" height="50%"></div>
 
 通过将相同的时钟源接到MAC和以太网PHY的REF_CLK引脚保证两者时钟源的同步。可以通过外部的50MHZ信号或者微控制器的MCO引脚提供这一时钟。当时钟来源MCO引脚时需配置合适的PLL，保证MCO引脚输出的时钟为50MHZ。
 
@@ -28,7 +28,7 @@ MII即“媒体独立接口”，也叫“独立于介质的接口”。它是IE
 
 就是Reduced GMII，GMII采用8位数据传输，RGMII采用4位数据传输，所以这个按字面意思理解就是减少的GMII。这个是因为RGMII在时钟的上升沿和下降沿均采样数据，所以数据位减少一般的情况下还是可以达到千兆的速率。其工作时钟125兆，兼容MII规定的10/100Mbps。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Ethernet_EVB_Hardware_Note/RGMII.jpg" width="50%" height="50%"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Ethernet_EVB_Hardware_Note/RGMII.jpg" width="50%" height="50%"></div>
 
 - TX_CLK:  RGMII发送时钟提供125mhz，25mhz，或2.5mhz参考时钟，容差±50 ppm，具体取决于速度。
 - TX_CTRL: RGMII发送控制。TX_EN出现在TX_CLK的上升沿。TX_EN和TX_ER出现在TX_CLK的下降沿。

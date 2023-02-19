@@ -70,7 +70,7 @@ int main(int argv, char argc[])
 gcc main.c -o app
 ```
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-Makefile/20200812144507.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Makefile/20200812144507.jpg"></div>
 
 我们可以从上图所示，得到一个名为 app 的目标文件。
 

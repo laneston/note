@@ -37,7 +37,7 @@ WARNING: You are using pip version 20.3.3; however, version 21.2.4 is available.
 You should consider upgrading via the 'C:\Users\Administrator\.espressif\python_env\idf4.3_py3.8_env\Scripts\python.exe -m pip install --upgrade pip' command.
 ```
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-ESP_Enviroment/ESP-IDF_warning.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-ESP_Enviroment/ESP-IDF_warning.jpg"></div>
 
 原因是默认的 pip 源加载不畅，解决办法是加载国内的 pip 源:
 
@@ -67,20 +67,20 @@ pip install keras -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirro
 
 这一步比较简单，就是在vscode插件搜索栏中输入 ESP 然后选择对应图标的那个。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-ESP_Enviroment/ESP-VScode-plug-in.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-ESP_Enviroment/ESP-VScode-plug-in.jpg"></div>
 
 插件安装完毕后会进入 ESP-IDF Setup 界面，界面中有3个下拉选择栏，Select ESP-IDF version一栏中选择本地的 ESP-IDF(Find ESP-IDF in your system)；Enter ESP-IDF directory 一栏中，选择第二步中ESP-IDF安装的路径，文件夹的名字一般为 esp-idf，这个文件夹里面有相关例程可以用作测试。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-ESP_Enviroment/esp-installed.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-ESP_Enviroment/esp-installed.jpg"></div>
 
 安装成功如上图显示。
 
 打开路径 \esp-idf\examples\get-started\hello_world ，点击下图中的编译按键，即可进行编译。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-ESP_Enviroment/ESP-compile.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-ESP_Enviroment/ESP-compile.jpg"></div>
 
 编译完毕后，可以在 build 文件夹下看到相应的 bin 文件。
 
-<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-ESP_Enviroment/ESP-Bin.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-ESP_Enviroment/ESP-Bin.jpg"></div>
 
 将开发板与电脑相连接，点击闪电形状的下载按键即可进行烧录操作。
