@@ -26,13 +26,21 @@ https://github.com/Fndroid/clash_for_windows_pkg/releases
 ./cfw
 ```
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-poxy/clash_config.jpg"></div>
+## 生成配置文件
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-poxy/clash.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-poxy/clash_config.jpg"width="50%" height="50%"></div>
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-poxy/Network_Proxy.jpg"></div>
+## 确认端口
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-poxy/clash_node.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-poxy/clash.jpg"width="50%" height="50%"></div>
+
+## 配置网络代理
+
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-poxy/Network_Proxy.jpg"width="50%" height="50%"></div>
+
+## 订阅节点
+
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-poxy/clash_node.jpg"width="50%" height="50%"></div>
 
 # electron-ssr 安装教程
 
