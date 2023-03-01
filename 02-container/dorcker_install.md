@@ -87,6 +87,9 @@ exit
 
 # ubuntu 环境下安装
 
+
+## WSL
+
 本人使用的是 Windows 自带的子系统 WSL。
 
 找到对应环境下的安装包：
@@ -100,7 +103,6 @@ sudo apt-get install ./containerd.io_1.5.11-1_amd64.deb
 sudo apt-get install ./docker-ce-cli_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docker-ce_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docker-scan-plugin_0.17.0_ubuntu-bionic_amd64.deb ./docker-ce-rootless-extras_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docker-compose-plugin_2.3.3_ubuntu-bionic_amd64.deb
 ```
 
-
 ```
 sudo apt-get install ./containerd.io_1.6.6-1_amd64.deb
 sudo apt-get install ./docker-ce-cli_20.10.17_3-0_ubuntu-jammy_amd64.deb ./docker-ce_20.10.17_3-0_ubuntu-jammy_amd64.deb ./docker-scan-plugin_0.17.0_ubuntu-jammy_amd64.deb ./docker-ce-rootless-extras_20.10.17_3-0_ubuntu-jammy_amd64.deb ./docker-compose-plugin_2.6.0_ubuntu-jammy_amd64.deb
@@ -112,16 +114,33 @@ sudo apt-get install ./docker-ce-cli_20.10.21~3-0~ubuntu-focal_amd64.deb ./docke
 ```
 
 
-
-
-
 启动 docker:
 
 ```
 sudo /etc/init.d/docker start
 ```
 
+## ubuntu22.04 桌面版
 
 ```
+sudo dpkg -i ./containerd.io_1.6.18-1_amd64.deb
+sudo dpkg -i ./docker-ce-cli_20.10.23_3-0_ubuntu-kinetic_amd64.deb
+sudo dpkg -i ./docker-ce_20.10.23_3-0_ubuntu-kinetic_amd64.deb
 
+sudo dpkg -i ./docker-compose-plugin_2.16.0-1_ubuntu.22.10_kinetic_amd64.deb 
+sudo dpkg -i ./docker-scan-plugin_0.23.0_ubuntu-kinetic_amd64.deb
+sudo dpkg -i ./docker-ce-rootless-extras_20.10.23_3-0_ubuntu-kinetic_amd64.deb
+sudo dpkg -i ./docker-buildx-plugin_0.10.2-1_ubuntu.22.10_kinetic_amd64.deb
+```
+
+```
+systemctl start docker.service
+systemctl enable docker.service
+```
+
+
+# 在线安装
+
+```
+sudo apt-get install containier.io docker-ce docker-ce-cli
 ```
