@@ -8,7 +8,6 @@ Docker 安装其实分为三个组件 containier.io，docker-ce, docker-cli [下
 
 3. docker-ce - Docker守护进程是完成所有管理工作的部分，在 Linux 上需要另外两个协同。
 
-
 ## 卸载
 
 如果已经安装了 docker 需要先进行卸载操作：
@@ -39,10 +38,10 @@ sudo yum install yum-utils device-mapper-persistent-data lvm2
 ```
 yum install ./containerd.io-1.5.11-3.1.el8.x86_64.rpm -y
 ```
+
 ```
 yum install ./docker-ce-20.10.9-3.el8.x86_64.rpm ./docker-ce-cli-20.10.9-3.el8.x86_64.rpm ./docker-scan-plugin-0.17.0-3.el8.x86_64.rpm ./docker-ce-rootless-extras-20.10.14-3.el8.x86_64.rpm ./docker-compose-plugin-2.3.3-3.el8.x86_64.rpm -y
 ```
-
 
 ## 启动
 
@@ -87,7 +86,6 @@ exit
 
 # ubuntu 环境下安装
 
-
 ## WSL
 
 本人使用的是 Windows 自带的子系统 WSL。
@@ -107,12 +105,11 @@ sudo apt-get install ./docker-ce-cli_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docke
 sudo apt-get install ./containerd.io_1.6.6-1_amd64.deb
 sudo apt-get install ./docker-ce-cli_20.10.17_3-0_ubuntu-jammy_amd64.deb ./docker-ce_20.10.17_3-0_ubuntu-jammy_amd64.deb ./docker-scan-plugin_0.17.0_ubuntu-jammy_amd64.deb ./docker-ce-rootless-extras_20.10.17_3-0_ubuntu-jammy_amd64.deb ./docker-compose-plugin_2.6.0_ubuntu-jammy_amd64.deb
 ```
-
+ 
 ```
 sudo apt-get install ./containerd.io_1.6.9-1_amd64.deb
 sudo apt-get install ./docker-ce-cli_20.10.21~3-0~ubuntu-focal_amd64.deb ./docker-ce_20.10.21~3-0~ubuntu-focal_amd64.deb ./docker-scan-plugin_0.21.0~ubuntu-focal_amd64.deb ./docker-ce-rootless-extras_20.10.21~3-0~ubuntu-focal_amd64.deb ./docker-compose-plugin_2.12.2~ubuntu-focal_amd64.deb
 ```
-
 
 启动 docker:
 
@@ -138,9 +135,9 @@ systemctl start docker.service
 systemctl enable docker.service
 ```
 
-
 # 在线安装
 
 ```
 sudo apt-get install containier.io docker-ce docker-ce-cli
 ```
+
