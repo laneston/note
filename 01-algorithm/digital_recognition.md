@@ -11,14 +11,88 @@ from torchvision import datasets, transforms
 from sklearn.metrics import accuracy_score
 ```
 
-### 1 import torch.nn as nn
+### import torch
+
+import torch 是 Python 中的一条导入语句，作用是引入 PyTorch 库（一个开源的深度学习框架）。PyTorch 由 Facebook 的 AI 研究团队开发，广泛用于构建和训练神经网络、处理张量（Tensor）数据，以及执行科学计算任务。
+
+核心功能：
+
+张量（Tensor）操作：PyTorch 的核心是 torch.Tensor，类似于 NumPy 的数组，但支持 GPU 加速和自动微分（Autograd）。
+
+自动微分（Autograd）：torch.autograd 模块可自动计算梯度，是神经网络训练的基础。
+
+神经网络构建：torch.nn 模块提供了预定义的层（如全连接层、卷积层）和损失函数。
+
+优化器：torch.optim 包含优化算法（如 SGD、Adam），用于更新模型参数。
+
+GPU 加速：通过 CUDA 支持，可以用 GPU 大幅加速计算。
+
+示例代码：
+
+```
+import torch  # 导入 PyTorch
+
+# 创建一个张量（Tensor）
+x = torch.tensor([1.0, 2.0, 3.0])
+print(x)  # 输出: tensor([1., 2., 3.])
+
+# 使用 GPU（如果可用）
+if torch.cuda.is_available():
+    x = x.cuda()  # 将张量移动到 GPU
+
+# 自动计算梯度
+x = torch.tensor([1.0], requires_grad=True)
+y = x ** 2
+y.backward()  # 反向传播
+print(x.grad)  # 输出梯度: tensor([2.])
+```
+
+
+
+
+
+###  import torch.nn as nn
 import torch.nn as nn 是 PyTorch 中导入神经网络模块的常见方式。具体解释如下：
 
 torch.nn: 这是 PyTorch 的神经网络模块，包含了构建神经网络所需的各种类和函数，如层（Linear, Conv2d 等）、激活函数（ReLU, Sigmoid 等）和损失函数（MSELoss, CrossEntropyLoss 等）。
 
 as nn: 这是将 torch.nn 模块简化为 nn，方便在代码中使用。例如，nn.Linear 比 torch.nn.Linear 更简洁。
 
-### 2 from torch.utils.data import DataLoader
+
+
+### import torch.optim as optim
+
+torch.optim 是什么？
+
+PyTorch 是一个深度学习框架，torch.optim 是它的子模块，专门提供优化器（优化算法）。
+
+优化器的作用是根据模型在训练时的梯度（gradient）自动调整模型的参数（例如权重和偏置），使模型的预测结果逐渐接近真实值。
+
+示例代码：
+
+```
+import torch
+import torch.optim as optim  # 导入优化器模块
+
+# 1. 定义一个简单的线性模型
+model = torch.nn.Linear(in_features=10, out_features=1)
+
+# 2. 选择优化器（例如随机梯度下降 SGD）
+optimizer = optim.SGD(model.parameters(), lr=0.01)  # lr 是学习率
+
+# 3. 模拟训练过程
+for epoch in range(100):
+    # 假设 input_data 是输入数据，target 是真实标签
+    output = model(input_data)          # 前向传播
+    loss = torch.nn.MSELoss()(output, target)  # 计算损失
+    optimizer.zero_grad()  # 清空之前的梯度（必须！否则梯度会累积）
+    loss.backward()        # 反向传播计算梯度
+    optimizer.step()       # 更新模型参数（根据梯度和学习率）
+```
+
+
+
+### from torch.utils.data import DataLoader
 from torch.utils.data import DataLoader 是 PyTorch 中用于导入数据加载工具 DataLoader 的语句。DataLoader 是一个非常重要的工具，用于高效地加载和处理数据集，特别是在训练深度学习模型时。
 
 torch.utils.data:
@@ -46,7 +120,7 @@ num_workers: 使用多少个子进程来加载数据（默认是 0，表示在�
 
 drop_last: 如果数据集大小不能被 batch_size 整除，是否丢弃最后一个不完整的批次（默认是 False）。
 
-### 3 from torchvision import datasets, transforms
+### from torchvision import datasets, transforms
 
 from torchvision import datasets, transforms 是 PyTorch 中用于导入 torchvision 库中两个重要模块的语句。torchvision 是 PyTorch 的一个扩展库，专门用于处理图像数据和计算机视觉任务。
 
@@ -88,6 +162,100 @@ transforms.RandomHorizontalFlip()：随机水平翻转图像。
 transforms.Compose()：将多个变换组合在一起。
 
 ### from sklearn.metrics import accuracy_score
+
+是 Python 中的一条导入语句，用于从 scikit-learn 库的 metrics 模块中导入 accuracy_score 函数。accuracy_score 是一个常用的评估指标，用于计算分类模型的准确率（即模型预测正确的样本占总样本的比例）。
+
+
+关键作用解释：
+accuracy_score 的作用：
+
+用于评估分类模型的性能。
+
+计算公式：准确率=预测正确的样本数/总样本数
+​
+ 
+适用于二分类和多分类任务。
+
+参数说明：
+
+y_true：真实标签（ground truth）。
+
+y_pred：模型预测的标签。
+
+normalize：是否返回比例（默认 True，返回准确率；False 时返回正确样本数）。
+
+sample_weight：样本权重（可选）。
+
+示例代码：
+
+```
+from sklearn.metrics import accuracy_score
+
+# 真实标签
+y_true = [0, 1, 1, 0, 1, 0, 1, 0]
+# 模型预测标签
+y_pred = [0, 1, 0, 0, 1, 1, 1, 0]
+
+# 计算准确率
+accuracy = accuracy_score(y_true, y_pred)
+print(f"准确率: {accuracy:.2f}")  # 输出: 准确率: 0.75
+```
+
+常见问题及解决方法：
+报错 ModuleNotFoundError: No module named 'sklearn'：
+
+原因：未安装 scikit-learn。
+
+解决：通过以下命令安装：
+
+```
+pip install scikit-learn
+```
+
+准确率的局限性：
+
+当类别不平衡时（例如 90% 的样本属于类别 A，10% 属于类别 B），准确率可能无法反映模型的真实性能。
+
+此时可以使用其他指标，如 F1-score、ROC-AUC 等。
+
+多分类任务：
+
+accuracy_score 也适用于多分类任务，只需确保 y_true 和 y_pred 的标签一致。
+
+
+其他常用评估指标：
+
+| 指标名称  | 作用                                         | 导入方式                                    |
+| :-------- | :------------------------------------------- | :------------------------------------------ |
+| F1-score  | 平衡精确率和召回率（适合不平衡数据）         | from sklearn.metrics import f1_score        |
+| Precision | 精确率（预测为正类的样本中实际为正类的比例） | from sklearn.metrics import precision_score |
+| Recall    | 召回率（实际为正类的样本中被正确预测的比例） | from sklearn.metrics import recall_score    |
+| ROC-AUC   | ROC 曲线下面积（适合二分类）                 | from sklearn.metrics import roc_auc_score   |
+
+示例：多分类任务的准确率计算
+
+```
+from sklearn.metrics import accuracy_score
+
+# 多分类任务
+y_true = [0, 1, 2, 2, 1, 0]
+y_pred = [0, 2, 2, 1, 1, 0]
+
+# 计算准确率
+accuracy = accuracy_score(y_true, y_pred)
+print(f"准确率: {accuracy:.2f}")  # 输出: 准确率: 0.67
+```
+
+总结：
+
+accuracy_score 是评估分类模型性能的简单而直观的指标。
+
+如果数据不平衡，建议结合其他指标（如 F1-score、ROC-AUC）综合评估模型。
+
+确保 y_true 和 y_pred 的格式一致（例如都是列表或 NumPy 数组）。
+
+
+
 
 
 
