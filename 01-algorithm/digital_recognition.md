@@ -1,6 +1,8 @@
 要使用PyTorch编写一个识别数字8的代码，我们可以使用MNIST数据集。MNIST数据集包含手写数字的图像，每个图像的大小为28x28像素。我们将构建一个简单的卷积神经网络（CNN）来识别数字8。
 
-以下是一个完整的代码示例：
+以下是一个完整的代码示例解析：
+
+## 模块导入
 
 ```
 import torch
@@ -17,15 +19,11 @@ import torch 是 Python 中的一条导入语句，作用是引入 PyTorch 库�
 
 核心功能：
 
-张量（Tensor）操作：PyTorch 的核心是 torch.Tensor，类似于 NumPy 的数组，但支持 GPU 加速和自动微分（Autograd）。
-
-自动微分（Autograd）：torch.autograd 模块可自动计算梯度，是神经网络训练的基础。
-
-神经网络构建：torch.nn 模块提供了预定义的层（如全连接层、卷积层）和损失函数。
-
-优化器：torch.optim 包含优化算法（如 SGD、Adam），用于更新模型参数。
-
-GPU 加速：通过 CUDA 支持，可以用 GPU 大幅加速计算。
+1. 张量（Tensor）操作：PyTorch 的核心是 torch.Tensor，类似于 NumPy 的数组，但支持 GPU 加速和自动微分（Autograd）。
+2. 自动微分（Autograd）：torch.autograd 模块可自动计算梯度，是神经网络训练的基础。
+3. 神经网络构建：torch.nn 模块提供了预定义的层（如全连接层、卷积层）和损失函数。
+4. 优化器：torch.optim 包含优化算法（如 SGD、Adam），用于更新模型参数。
+5. GPU 加速：通过 CUDA 支持，可以用 GPU 大幅加速计算。
 
 示例代码：
 
