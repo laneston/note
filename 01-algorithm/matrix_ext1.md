@@ -404,10 +404,30 @@ A = [1, 2, 3;
 % 计算矩阵的迹
 tr_A = trace(A);
 
+% 计算特征值和特征向量
+[V, D] = eig(A);
+
+% 仅计算特征值
+eigenvalues = eig(A);
+
 % 显示结果
 disp('矩阵 A 的迹是:');
 disp(tr_A);
+
+% 显示特征向量矩阵 V
+disp('特征向量矩阵 V:');
+disp(V);
+
+% 显示特征值矩阵 D
+disp('特征值矩阵 D:');
+disp(D);
+
+disp('矩阵 A 的特征值是:');
+disp(eigenvalues);
 ```
+
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Matrix/eigenvalues_matlab.jpg"></div>
+
 
 **pytorch操作如下**
 
@@ -422,11 +442,21 @@ A = torch.tensor([[1.0, 2.0, 3.0],
 # 计算矩阵的迹
 tr_A = torch.trace(A)
 
+# 计算特征值和特征向量
+eigenvalues, eigenvectors = torch.linalg.eig(A)
+
 # 输出结果
 print("矩阵 A 的迹是:", tr_A.item())
+
+
+# 输出结果
+print("特征向量矩阵:")
+print(eigenvectors)
+print("特征值矩阵:")
+print(eigenvalues)
 ```
 
-
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Matrix/eigenvalues_torch.jpg"></div>
 
 
 
