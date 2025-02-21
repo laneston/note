@@ -25,27 +25,6 @@ import torch 是 Python 中的一条导入语句，作用是引入 PyTorch 库�
 4. 优化器：torch.optim 包含优化算法（如 SGD、Adam），用于更新模型参数。
 5. GPU 加速：通过 CUDA 支持，可以用 GPU 大幅加速计算。
 
-示例代码：
-
-```
-import torch  # 导入 PyTorch
-
-# 创建一个张量（Tensor）
-x = torch.tensor([1.0, 2.0, 3.0])
-print(x)  # 输出: tensor([1., 2., 3.])
-
-# 使用 GPU（如果可用）
-if torch.cuda.is_available():
-    x = x.cuda()  # 将张量移动到 GPU
-
-# 自动计算梯度
-x = torch.tensor([1.0], requires_grad=True)
-y = x ** 2
-y.backward()  # 反向传播
-print(x.grad)  # 输出梯度: tensor([2.])
-```
-
-
 
 
 
