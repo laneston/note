@@ -286,8 +286,44 @@ $$
 
 
 
+$$
+C=\left [{\begin{matrix}4&1&-1\\2&3&-1\\1&2&0\end{matrix}}\right ]
+$$
 
 
+
+
+
+**MATLAB操作如下**
+
+```
+% 定义一个 3x3 矩阵
+A = [4, 1, -1;
+     2, 3, -1;
+     1, 2, 0];
+
+% 计算特征值和特征向量
+[V, D] = eig(A);
+
+% 显示结果
+disp('特征向量矩阵 V:');
+disp(V);
+disp('特征值矩阵 D:');
+disp(D);
+```
+
+输出：
+
+```
+特征向量矩阵 V:
+   -0.6342    0.0000    0.2208
+   -0.6342    0.7071    0.2208
+   -0.4422    0.7071    0.9500
+特征值矩阵 D:
+    4.3028         0         0
+         0    2.0000         0
+         0         0    0.6972
+```
 
 
 # 迹（Trace）
@@ -336,7 +372,10 @@ $$
 ### 计算迹与特征值的关系
 
 
-矩阵 $B=\left [{\begin{matrix}2&1\\1&3\end{matrix}}\right ]$ 其特征值为 ${{λ}_{1}}=1+\sqrt{2}$ 和 ${{λ}_{1}}=1-\sqrt{2}$ 则 $tr(B)=2+3=5={{λ}_{1}}+{{λ}_{1}}$
+矩阵 $B=\left [{\begin{matrix}2&1\\1&3\end{matrix}}\right ]$ 其特征值为 ${{λ}_{1}}=1.3820$ 和 ${{λ}_{2}}=3.6180$ 则 $tr(B)=2+3=5={{λ}_{1}}+{{λ}_{2}}$
+
+
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Matrix/eigenvalues.jpg"></div>
 
 ### 相似变换下迹不变
 
@@ -354,13 +393,38 @@ $$
 
 
 
+**MATLAB操作如下**
 
+```
+% 定义一个 3x3 矩阵
+A = [1, 2, 3;
+     4, 5, 6;
+     7, 8, 9];
 
+% 计算矩阵的迹
+tr_A = trace(A);
 
+% 显示结果
+disp('矩阵 A 的迹是:');
+disp(tr_A);
+```
 
+**pytorch操作如下**
 
+```
+import torch
 
+# 定义一个 3x3 矩阵
+A = torch.tensor([[1.0, 2.0, 3.0],
+                  [4.0, 5.0, 6.0],
+                  [7.0, 8.0, 9.0]])
 
+# 计算矩阵的迹
+tr_A = torch.trace(A)
+
+# 输出结果
+print("矩阵 A 的迹是:", tr_A.item())
+```
 
 
 
@@ -682,6 +746,7 @@ det_D = torch.linalg.det(D)
 print("矩阵 D 的行列式是:", det_D.item())
 ```
 
+matlab示例
 
 <div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-Matrix/matrix_exp.jpg"></div>
 
