@@ -1,3 +1,15 @@
+- [梯度计算概述](#梯度计算概述)
+- [梯度计算的原理](#梯度计算的原理)
+- [对于离散数据而言](#对于离散数据而言)
+  - [一维离散数据的梯度近似](#一维离散数据的梯度近似)
+    - [前向差分（Forward Difference）](#前向差分forward-difference)
+    - [后向差分（Backward Difference）](#后向差分backward-difference)
+    - [中心差分（Central Difference）](#中心差分central-difference)
+  - [二维离散数据的梯度近似](#二维离散数据的梯度近似)
+  - [多维扩展（以三维为例）](#多维扩展以三维为例)
+  - [误差分析与步长选择](#误差分析与步长选择)
+
+
 
 # 梯度计算概述
 
@@ -105,9 +117,10 @@ $$
 ## 二维离散数据的梯度近似
 
 对二维网格数据 $f({x}_{i})$，需分别计算 x 和 y 方向的偏导数，再组合成梯度向量
-$
+
+$$
 ∇f=\left ({\frac{\partial f}{\partial {{x}}},\frac{\partial f}{\partial {{y}}}}\right )
-$
+$$
 
 计算 x 方向的偏导数
 
@@ -154,6 +167,25 @@ $f(2,2)=8$，$f(2,4)=20$，$(20-8)/2=6$;
 
 
 
+**使用pytorch进行验证**
+
+
+```
+import torch
+
+# 定义变量并启用梯度跟踪
+x = torch.tensor(2.0, requires_grad=True)
+y = torch.tensor(3.0, requires_grad=True)
+
+# 计算函数值
+f = x**2 + y**2
+
+# 反向传播，计算梯度
+f.backward()
+
+# 输出梯度
+print("▽f=(", x.grad.item(), y.grad.item(),")")
+```
 
 
 
