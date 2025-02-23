@@ -1,32 +1,31 @@
 
 
 
- 矩阵的幂
+## 矩阵的幂
 
 
- 分块矩阵运算
+## 分块矩阵运算
 
 
- 哈达玛积（Hadamard Product）
+## 哈达玛积（Hadamard Product）
 
 
- 克罗内克积（Kronecker Product）
-
-
-
+## 克罗内克积（Kronecker Product）
 
 
 
 
 
 
-矩阵的秩（Rank）
 
 
-特征值与特征向量
+## 矩阵的秩（Rank）
 
 
-矩阵分解
+## 特征值与特征向量
+
+
+## 矩阵分解
 
 
 常见分解方式：
