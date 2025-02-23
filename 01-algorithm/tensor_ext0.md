@@ -20,7 +20,7 @@ $$
 
 使用MATLAB输出结果矩阵和三维图形：
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensorjpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/z_func_mesh.jpg"></div>
 
 
 为了计算二维函数 $f(x,y)={{x}^{2}}+{{y}^{2}}$ 在某一点的梯度，我们需要求出该函数在 x 和 y 方向上的偏导数，并将它们组合成一个向量。
