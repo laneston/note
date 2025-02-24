@@ -15,6 +15,7 @@
   - [案例解析](#案例解析)
     - [数据预处理与加载](#数据预处理与加载)
     - [神经网络模型](#神经网络模型)
+    - [模型部署](#模型部署)
     - [损失函数与优化器](#损失函数与优化器)
     - [训练流程](#训练流程)
     - [准确率计算](#准确率计算)
@@ -102,8 +103,6 @@ $$
 
 
 # 应用案例
-
-
 
 
 ## 基于MNIST数据集的一个简单案例
@@ -219,140 +218,7 @@ torch.save(model.state_dict(), "mnist_relu_model.pth")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
-
-# 1. 数据预处理
-transform = transforms.Compose([
-    transforms.ToTensor(), #将PIL图像转换为张量并归一化到[0,1]范围
-    transforms.Normalize((0.1307,), (0.3081,))  # MNIST标准化参数，使用MNIST的标准均值(0.1307)和标准差(0.3081)
-])
-
-# 加载数据集
-train_dataset = datasets.MNIST(
-    root='./data', 
-    train=True,
-    download=True,
-    transform=transform
-)
-test_dataset = datasets.MNIST(
-    root='./data',
-    train=False,
-    transform=transform
-)
-
-# 创建数据加载器
-batch_size = 64
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-
-# 定义神经网络模型
-# 包含两个隐藏层，每层后接nn.ReLU()激活
-# 使用nn.Sequential简化层连接
-# 输出层直接使用线性层，配合CrossEntropyLoss实现分类
-
-class SimpleNN(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.flatten = nn.Flatten()
-        self.layers = nn.Sequential(
-            nn.Linear(28 * 28, 128),
-            nn.ReLU(),          # 使用nn.ReLU模块
-            nn.Linear(128, 64),
-            nn.ReLU(),          # 第二层ReLU
-            nn.Linear(64, 10)
-        )
-    
-    def forward(self, x):
-        x = self.flatten(x)
-        return self.layers(x)
-
-model = SimpleNN()
-
-# 3. 定义损失函数和优化器（使用Adam优化器）
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
-
-# 4. 训练循环
-num_epochs = 5
-for epoch in range(num_epochs):
-    model.train()
-    for images, labels in train_loader:
-        # 前向传播
-        outputs = model(images)
-        loss = criterion(outputs, labels)
-        
-        # 反向传播
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-    
-    # 每轮结束后测试
-    model.eval()
-    correct = 0
-    total = 0
-    with torch.no_grad():
-        for images, labels in test_loader:
-            outputs = model(images)
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-    
-    print(f'Epoch [{epoch+1}/{num_epochs}], Accuracy: {100*correct/total:.2f}%')
-
-print("训练完成！")
-```
-
-
 ## 案例解析
-
-该代码完整展示了PyTorch实现图像分类任务的标准流程，可作为深度学习入门的基础模板。通过调整网络结构（如增加层数、使用卷积层）和超参数（学习率、batch size），可以进一步优化模型性能。
-
-数据加载 → 模型初始化 → 前向传播 → 损失计算 → 反向传播 → 参数更新 → 循环训练 → 周期验证
 
 以下是对该代码的逐部分解析：
 
@@ -360,6 +226,8 @@ print("训练完成！")
 
 
 ```
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # 自动检测硬件加速
+
 transform = transforms.Compose([
     transforms.ToTensor(),  # 将PIL图像转换为张量并归一化到[0,1]范围
     transforms.Normalize((0.1307,), (0.3081,))  # MNIST标准化参数
@@ -368,51 +236,71 @@ transform = transforms.Compose([
 
 - 功能：定义数据预处理流程
 - 关键点：
+    - 硬件加速支持：代码通过torch.device自动检测GPU可用性，优先使用CUDA加速训练
     - ToTensor()：将PIL图像转换为PyTorch张量，并自动将像素值从[0,255]缩放到[0,1]
     - Normalize()：使用MNIST的标准均值(0.1307)和标准差(0.3081)进行标准化
     - 最终数据分布：$output=\frac{[0,1]-0.1307}{0.3081}=[-0.4242,2.8215]$
 
 
 ```
-train_loader = DataLoader(..., batch_size=64, shuffle=True)
-test_loader = DataLoader(..., batch_size=64, shuffle=False)
+train_loader = DataLoader(
+    train_dataset,
+    batch_size=64,
+    shuffle=True,
+    num_workers=2
+)
+test_loader = DataLoader(
+    test_dataset,
+    batch_size=1000,
+    shuffle=False
+)
 ```
 
 参数解析：
 
+- num_workers=2：使用多进程加速数据加载
 - batch_size=64：每个迭代加载64个样本
 - shuffle=True：训练集打乱顺序，防止模型记忆样本顺序
 - shuffle=False：测试集保持原始顺序
+- batch_size=1000：大批次测试减少内存开销
+
 
 ### 神经网络模型
 
 
 ```
-class SimpleNN(nn.Module):
+class Net(nn.Module):
     def __init__(self):
         super().__init__()
-        self.flatten = nn.Flatten()
-        self.layers = nn.Sequential(
-            nn.Linear(28 * 28, 128),
-            nn.ReLU(),
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            nn.Linear(64, 10)
-        )
+        self.flatten = nn.Flatten()        # 展平层（28x28→784）
+        self.fc1 = nn.Linear(784, 512)     # 全连接层1
+        self.relu = nn.ReLU()              # ReLU激活
+        self.fc2 = nn.Linear(512, 10)      # 全连接层2（输出层）
+
+    def forward(self, x):
+        x = self.flatten(x)
+        x = self.fc1(x)
+        x = self.relu(x)  # 应用ReLU非线性激活
+        x = self.fc2(x)
+        return x
+
+
 ```
 
-结构分析：
+输入层 → 全连接层1 → ReLU → 全连接层2（输出）
 
-- 输入层：28x28=784个神经元（对应MNIST图像尺寸）
-- 隐藏层1：128个神经元 + ReLU激活
-- 隐藏层2：64个神经元 + ReLU激活
-- 输出层：10个神经元（对应0-9数字分类）
+参数量计算：
 
-设计特点：
+FC1: 784×512 + 512 = 401,920
 
-- 使用nn.Sequential封装网络层，简化前向传播逻辑
-- 输出层不使用激活函数，因为CrossEntropyLoss已包含Softmax
+FC2: 512×10 + 10 = 5,130
 
+
+### 模型部署
+
+```
+model = Net().to(device)  # 部署到GPU/CPU
+```
 
 ### 损失函数与优化器
 
@@ -437,21 +325,19 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 ### 训练流程
 
 ```
-for epoch in range(num_epochs):
-    model.train()
-    # 训练阶段
-    for images, labels in train_loader:
-        outputs = model(images)
-        loss = criterion(outputs, labels)
+def train(epoch):
+    model.train()  # 训练模式
+    for batch_idx, (data, target) in enumerate(train_loader):
+        data, target = data.to(device), target.to(device)
+        optimizer.zero_grad()        # 梯度清零
+        output = model(data)         # 前向传播
+        loss = criterion(output, target)
+        loss.backward()              # 反向传播
+        optimizer.step()            # 参数更新
         
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-    
-    # 测试阶段
-    model.eval()
-    with torch.no_grad():
-        # 准确率计算...
+        # 进度打印（每100个batch）
+        if batch_idx % 100 == 0: 
+            print(...)
 ```
 
 **关键步骤：**
@@ -460,43 +346,64 @@ for epoch in range(num_epochs):
 2. optimizer.zero_grad()：清空梯度缓存，防止梯度累积
 3. loss.backward()：反向传播计算梯度
 4. optimizer.step()：更新网络参数
-5. model.eval()：切换为评估模式
-6. torch.no_grad()：禁用梯度计算，节省内存
 
 
 ### 准确率计算
 
 ```
-_, predicted = torch.max(outputs.data, 1)
-correct += (predicted == labels).sum().item()
+def test():
+    model.eval()  # 评估模式
+    test_loss = 0
+    correct = 0
+    with torch.no_grad():  # 禁用梯度计算
+        for data, target in test_loader:
+            data, target = data.to(device), target.to(device)
+            output = model(data)
+            test_loss += criterion(output, target).item()
+            pred = output.argmax(dim=1)  # 取预测类别
+            correct += pred.eq(target).sum().item()
+    
+    # 打印测试结果
+    test_loss /= len(test_loader.dataset)
+    print(f'Test Accuracy: {100.*correct/len(test_loader.dataset):.2f}%')
 ```
 
-实现逻辑：
+关闭Dropout/BatchNorm的随机性
 
-1. torch.max(dim=1)：获取每个样本预测概率最大的类别
-2. 对比预测结果与真实标签，统计正确预测数量
-3. 最终准确率 = 正确数 / 总样本数 × 100%
+不计算梯度以节省内存
 
+```
+for epoch in range(1, 11):  # 训练10个epoch
+    train(epoch)
+    test()
 
+torch.save(model.state_dict(), "mnist_relu_model.pth")  # 保存模型权重
+```
 
+训练策略：
 
+每个epoch包含完整训练集遍历+测试集验证
+
+10个epoch通常可达到98%+准确率
 
 
 ## 优化建议
 
-**初始化策略**
+**初始化策略：**使用He初始化（方差为 $2/n$，n为输入维度），适配ReLU的激活特性。
 
-使用He初始化（方差为 $2/n$，n为输入维度），适配ReLU的激活特性。
+**与BatchNorm结合：**标准化每层输入，缓解死亡ReLU问题，加速训练。
 
-**与BatchNorm结合**
+**监控神经元状态：**训练中统计激活率为零的神经元比例，过高时需调整超参数。
 
-标准化每层输入，缓解死亡ReLU问题，加速训练。
+**增加隐藏层：**提升模型容量
 
-**监控神经元状态**
+**添加Dropout：**防止过拟合
 
-训练中统计激活率为零的神经元比例，过高时需调整超参数。
+**使用卷积层：**替换全连接层以更好捕捉空间特征
 
+**学习率调度：**动态调整学习率加速收敛
 
+**数据增强：**添加旋转/平移增强鲁棒性
 
 
 
