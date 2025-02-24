@@ -115,6 +115,15 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
+import torch
+
+if torch.cuda.is_available():
+    print("the machine support cuda.")
+else:
+    print("the machine only support cpu.")
+
+
+
 # 设置设备
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -129,12 +138,12 @@ train_dataset = datasets.MNIST(
     root='./data', 
     train=True,
     download=True,
-    transform=transform
+    transform=transform,
 )
 test_dataset = datasets.MNIST(
     root='./data',
     train=False,
-    transform=transform
+    transform=transform,
 )
 
 # 创建数据加载器
@@ -206,15 +215,14 @@ def test():
           f'({100. * correct / len(test_loader.dataset):.2f}%)\n')
 
 # 训练和测试循环
-for epoch in range(1, 11):  # 训练10个epoch
-    train(epoch)
-    test()
+if __name__ == '__main__':
+    for epoch in range(1, 11):  # 训练10个epoch
+        train(epoch)
+        test()
 
 # 保存模型
 torch.save(model.state_dict(), "mnist_relu_model.pth")
 ```
-
-
 
 
 
@@ -385,6 +393,10 @@ torch.save(model.state_dict(), "mnist_relu_model.pth")  # 保存模型权重
 每个epoch包含完整训练集遍历+测试集验证
 
 10个epoch通常可达到98%+准确率
+
+
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/ReLU.jpg"></div>
+
 
 
 ## 优化建议
