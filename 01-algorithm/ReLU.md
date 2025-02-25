@@ -504,12 +504,3 @@ torch.save(model.state_dict(), "mnist_relu_model.pth")  # 保存模型权重
 **数据增强：**添加旋转/平移增强鲁棒性
 
 
-
-
-
-
-
-
-
-
-
