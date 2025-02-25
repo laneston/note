@@ -418,6 +418,25 @@ class CNN(nn.Module):
 ```
 
 
+class CNN(nn.Module)：定义名为 CNN 的类，继承 PyTorch 的神经网络基类 nn.Module。
+
+def \__init__(self)：初始化函数，定义网络结构。
+
+super(CNN, self).\__init__()：调用父类 nn.Module 的初始化方法。
+
+self.conv1：第一个卷积层，输入通道数 1（灰度图），输出通道数 32，卷积核大小 3×3，步长 1，填充 1（保持输入输出尺寸一致）。
+
+self.conv2：第二个卷积层，输入通道数 32，输出通道数 64，参数与 conv1 相同。
+
+self.fc1：第一个全连接层，输入维度 64*7*7（两次池化后的特征图展平），输出维度 128。
+
+self.fc2：输出层，输入维度 128，输出维度 1（二分类任务，如判断是否为数字“8”）。
+
+
+
+
+
+
 ## 网络整体结构
 
 
@@ -524,16 +543,54 @@ self.fc2 = nn.Linear(128, 1)  # 输出为1，表示是否为数字8
 ## 前向传播流程
 
 ```
-def forward(self, x):
-    x = torch.relu(self.conv1(x))       # Conv1 + ReLU激活
-    x = torch.max_pool2d(x, 2)         # 池化
-    x = torch.relu(self.conv2(x))       # Conv2 + ReLU激活
-    x = torch.max_pool2d(x, 2)         # 池化
-    x = x.view(x.size(0), -1)          # 展平
-    x = torch.relu(self.fc1(x))        # FC1 + ReLU激活
-    x = self.fc2(x)                    # 输出层（无激活函数）
-    return x
+    def forward(self, x):
+        x = torch.relu(self.conv1(x))       # 卷积1 + ReLU激活
+        x = torch.max_pool2d(x, 2)          # 最大池化1（下采样）
+        x = torch.relu(self.conv2(x))       # 卷积2 + ReLU激活
+        x = torch.max_pool2d(x, 2)          # 最大池化2（下采样）
+        x = x.view(x.size(0), -1)           # 展平多维特征图为一维向量
+        x = torch.relu(self.fc1(x))        # 全连接1 + ReLU激活
+        x = self.fc2(x)                     # 输出层（无激活函数）
+        return x
 ```
+
+
+x = torch.relu(self.conv1(x))：
+对输入 x 进行第一次卷积操作，然后通过 ReLU 激活函数。
+输入尺寸：假设输入为 (batch_size, 1, 28, 28)（MNIST图像），输出尺寸为 (batch_size, 32, 28, 28)。
+
+x = torch.max_pool2d(x, 2)：
+使用 2×2 的窗口进行最大池化，步长默认与窗口大小相同（即 2）。
+输出尺寸：(batch_size, 32, 14, 14)（长宽各减半）。
+
+x = torch.relu(self.conv2(x))：
+第二次卷积操作，输出通道数 64，尺寸保持 14×14。
+输出尺寸：(batch_size, 64, 14, 14)。
+
+x = torch.max_pool2d(x, 2)：
+第二次最大池化，输出尺寸为 (batch_size, 64, 7, 7)。
+
+x = x.view(x.size(0), -1)：
+将多维特征图展平为一维向量，x.size(0) 保留 batch 维度，-1 自动计算展平后的长度。
+展平后尺寸：(batch_size, 64*7*7) = (batch_size, 3136)。
+
+x = torch.relu(self.fc1(x))：
+全连接层 fc1 后接 ReLU 激活，输出维度 128。
+
+x = self.fc2(x)：
+输出层直接返回 logits（未激活的数值），适用于二分类任务（如使用 BCEWithLogitsLoss 损失函数）。
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 关键设计分析
 
@@ -566,39 +623,27 @@ Padding策略：padding=1 保持特征图尺寸不变，避免信息丢失。
 
 ## 改进建议
 
-批归一化（BatchNorm）：
-
-在卷积层后添加 nn.BatchNorm2d，加速收敛并提升泛化能力。
+添加 Dropout：在全连接层后加入 nn.Dropout() 防止过拟合。
 
 ```
-self.conv1 = nn.Conv2d(1, 32, 3, 1, 1)
-self.bn1 = nn.BatchNorm2d(32)
+self.dropout = nn.Dropout(0.5)  # 添加到 __init__
+x = self.dropout(torch.relu(self.fc1(x)))  # 修改 forward
 ```
 
-Dropout：
-
-在全连接层前添加 nn.Dropout，防止过拟合。
+使用 BatchNorm：加速训练并提升稳定性。
 
 ```
-self.dropout = nn.Dropout(0.5)
-x = self.dropout(torch.relu(self.fc1(x)))
+self.bn1 = nn.BatchNorm2d(32)  # 添加到 __init__
+x = torch.relu(self.bn1(self.conv1(x)))  # 修改 forward
 ```
 
-输出激活函数：
-
-若使用普通 BCELoss，需在最后添加 torch.sigmoid：
+全局平均池化替代全连接层：减少参数量（现代网络常用）。
 
 ```
-x = torch.sigmoid(self.fc2(x))
+self.gap = nn.AdaptiveAvgPool2d((1,1))  # 添加到 __init__
+x = self.gap(x)  # 替换展平操作
+x = x.view(x.size(0), -1)
 ```
-
-
-
-
-
-
-
-
 
 
 
