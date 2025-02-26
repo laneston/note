@@ -149,7 +149,6 @@ accuracy_score 的作用：
 
 计算公式：准确率=预测正确的样本数/总样本数
 ​
- 
 适用于二分类和多分类任务。
 
 参数说明：
@@ -442,7 +441,51 @@ self.fc2：输出层，输入维度 128，输出维度 1（二分类任务，如
 
 该CNN用于MNIST手写数字的二分类任务（判断是否为数字8），包含两个卷积层和两个全连接层，结构如下：
 
-输入 → Conv1 → ReLU → MaxPool → Conv2 → ReLU → MaxPool → 展平 → FC1 → ReLU → FC2 → 输出
+```
+输入层 (Input)
+↓ 尺寸: [Batch, 1, 28, 28]
+|
+├─ **Conv1层**  
+│  ├─ 类型: Conv2d  
+│  ├─ 参数: in=1, out=32, kernel=3×3, stride=1, padding=1  
+│  ├─ 输出尺寸: [Batch, 32, 28, 28]  
+│  └─ 激活函数: ReLU  
+↓
+|
+├─ **MaxPool1层**  
+│  ├─ 类型: MaxPool2d  
+│  ├─ 参数: kernel=2×2, stride=2  
+│  └─ 输出尺寸: [Batch, 32, 14, 14]  
+↓
+|
+├─ **Conv2层**  
+│  ├─ 类型: Conv2d  
+│  ├─ 参数: in=32, out=64, kernel=3×3, stride=1, padding=1  
+│  ├─ 输出尺寸: [Batch, 64, 14, 14]  
+│  └─ 激活函数: ReLU  
+↓
+|
+├─ **MaxPool2层**  
+│  ├─ 类型: MaxPool2d  
+│  ├─ 参数: kernel=2×2, stride=2  
+│  └─ 输出尺寸: [Batch, 64, 7, 7]  
+↓
+|
+├─ **展平层 (Flatten)**  
+│  └─ 输出尺寸: [Batch, 64×7×7] → [Batch, 3136]  
+↓
+|
+├─ **FC1层 (全连接层)**  
+│  ├─ 类型: Linear  
+│  ├─ 参数: in=3136, out=128  
+│  └─ 激活函数: ReLU  
+↓
+|
+└─ **FC2层 (输出层)**  
+   ├─ 类型: Linear  
+   ├─ 参数: in=128, out=1  
+   └─ 输出值: Logits (未激活的二分类结果)
+```
 
 
 ## 各层详解与参数计算
@@ -477,10 +520,6 @@ x = torch.max_pool2d(x, 2)  # kernel_size=2, stride=2（默认）
 输入：32通道的 28×28 特征图。
 
 输出：32通道的 14×14 特征图，输出尺寸：28/2=14。
-
-
-
-
 
 
 
@@ -557,14 +596,17 @@ self.fc2 = nn.Linear(128, 1)  # 输出为1，表示是否为数字8
 
 x = torch.relu(self.conv1(x))：
 对输入 x 进行第一次卷积操作，然后通过 ReLU 激活函数。
+
 输入尺寸：假设输入为 (batch_size, 1, 28, 28)（MNIST图像），输出尺寸为 (batch_size, 32, 28, 28)。
 
 x = torch.max_pool2d(x, 2)：
 使用 2×2 的窗口进行最大池化，步长默认与窗口大小相同（即 2）。
+
 输出尺寸：(batch_size, 32, 14, 14)（长宽各减半）。
 
 x = torch.relu(self.conv2(x))：
 第二次卷积操作，输出通道数 64，尺寸保持 14×14。
+
 输出尺寸：(batch_size, 64, 14, 14)。
 
 x = torch.max_pool2d(x, 2)：
@@ -572,9 +614,11 @@ x = torch.max_pool2d(x, 2)：
 
 x = x.view(x.size(0), -1)：
 将多维特征图展平为一维向量，x.size(0) 保留 batch 维度，-1 自动计算展平后的长度。
+
 展平后尺寸：(batch_size, 64*7*7) = (batch_size, 3136)。
 
 x = torch.relu(self.fc1(x))：
+
 全连接层 fc1 后接 ReLU 激活，输出维度 128。
 
 x = self.fc2(x)：
@@ -650,72 +694,271 @@ x = x.view(x.size(0), -1)
 
 
 
-
+# 初始化模型、损失函数和优化器
 
 
 
 ```
-# 初始化模型、损失函数和优化器
 model = CNN()
 criterion = nn.BCEWithLogitsLoss()  # 二分类交叉熵损失
 optimizer = optim.Adam(model.parameters(), lr=0.001)
+```
+
+
+解析：
+
+CNN() 调用之前定义的 CNN 类的构造函数，初始化网络结构（卷积层、池化层、全连接层等）。
+
+默认设备：模型参数和数据会存储在CPU上；若需使用GPU训练，需显式指定（如 model.to('cuda')）。
+
+关键点：
+
+模型初始化后，可通过 print(model) 查看网络结构。
+
+模型参数（权重和偏置）会随机初始化，训练过程中通过优化器逐步更新。
+
+
+解析：
+
+BCEWithLogitsLoss：结合 Sigmoid 激活和二分类交叉熵损失（Binary Cross Entropy, BCE）的复合函数。
+
+数学公式：
+
+$$
+Loss=-\frac{1}{N}\sum_{i=1}^{n}{[{{y}_{i}}⋅log(σ({{z}_{i}}))+(1+{{y}_{i}})⋅log(1-σ({{z}_{i}}))]}
+$$
+​
+其中 ${z}_{i}$ 是模型输出的 logits（未经过 Sigmoid），σ 是 Sigmoid 函数。
+
+数值稳定性：内部优化计算，避免 Sigmoid 的极端值导致数值溢出。
+
+适用场景：二分类任务（如判断是否为数字“8”），输出层直接返回 logits（如代码中 fc2 层无激活函数）。
+
+
+
+
+
+
+
 
 # 训练模型
+
+```
 num_epochs = 5
+```
+作用：定义训练的总轮数（epoch），即完整遍历训练集的次数。
+
+解析：
+
+此处设置为 5，表示模型将在训练数据上迭代训练 5 次。
+
+
+```
 for epoch in range(num_epochs):
     model.train()
+```
+
+
+常见调整：根据任务复杂度调整轮数（简单任务可能只需 10 轮，复杂任务可能需数百轮）。
+
+for epoch in range(num_epochs)：遍历每一轮训练（从 0 到 num_epochs-1）。
+
+model.train()：将模型设置为训练模式，启用 Dropout、BatchNorm 等层的训练行为。
+
+
+```
     for images, labels in train_loader:
         # 将标签转换为二进制：1表示数字8，0表示其他数字
         labels = (labels == 8).float().view(-1, 1)
-        
+```
+
+for images, labels in train_loader：
+从数据加载器 train_loader 中按批次（batch）加载数据，每批次包含图像 images 和标签 labels。
+
+输入假设：假设 train_loader 输出标签为整数（如 MNIST 的标签 0~9）。
+
+labels = (labels == 8).float().view(-1, 1)：
+将标签转换为二分类任务的二进制形式：
+
+labels == 8：生成布尔张量（True/False），对应是否为数字 8。
+
+.float()：将布尔值转换为浮点数（1.0 表示是数字 8，0.0 表示其他）。
+
+.view(-1, 1)：调整形状为 [batch_size, 1]，与模型输出的 logits 维度匹配。
+
+
+
+```
         # 前向传播
         outputs = model(images)
         loss = criterion(outputs, labels)
-        
+```
+
+outputs = model(images)：将图像输入模型，得到预测输出 outputs（logits）。
+
+loss = criterion(outputs, labels)：计算损失值，criterion 为 BCEWithLogitsLoss，直接处理 logits 和二进制标签。
+
+
+```
         # 反向传播和优化
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-    
+```    
+
+optimizer.zero_grad()：清空优化器中所有参数的梯度，防止梯度累积。
+
+loss.backward()：反向传播计算梯度（自动微分）。
+
+optimizer.step()：根据梯度更新模型参数（执行优化步骤）。
+
+```
     print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+```
+
+loss.item()：从张量中提取标量损失值（转换为 Python 浮点数）。
+
+.4f：格式化输出，保留 4 位小数。
+
+注意：此处打印的是当前 epoch 最后一个 batch 的损失，而非整个 epoch 的平均损失。
+改进建议：在 epoch 内累积损失并计算平均值，更准确反映训练状态。
+
+
+
+
+
+
 
 # 测试模型
+
+```
 model.eval()
+```
+
+作用：切换模型至评估模式，关闭训练相关的特定层行为（如 Dropout、BatchNorm 的随机性）。
+
+关键点：
+
+必需操作：确保评估阶段结果稳定，避免因随机性导致预测波动。
+
+对比：训练时需调用 model.train() 恢复随机行为。
+
+
+```
 all_preds = []
 all_labels = []
+```
+
+作用：创建空列表，用于存储所有批次的预测结果和真实标签。
+
+解析：
+
+all_preds：保存模型输出的二分类预测结果（0 或 1）。
+
+all_labels：保存二值化后的真实标签（0 或 1）。
+
+
+```
 with torch.no_grad():
+```
+
+作用：在上下文管理器内禁用自动梯度计算，减少内存占用并加速推理。
+
+原理：
+
+torch.no_grad()：关闭 requires_grad 标志，避免前向传播时构建计算图。
+
+节省资源：适用于无需反向传播的评估或推理阶段。
+
+
+```
     for images, labels in test_loader:
         # 将标签转换为二进制
         labels = (labels == 8).float().view(-1, 1)
-        
+```
+
+逐行解析：
+
+for images, labels in test_loader：从测试数据加载器中按批次加载图像和原始标签。
+
+labels = (labels == 8).float().view(-1, 1)：
+
+二值化：将标签转换为 1.0（是数字8）或 0.0（其他数字）。
+
+维度调整：view(-1, 1) 确保标签形状为 [batch_size, 1]，与模型输出对齐。
+
+
+```
         outputs = model(images)
         preds = torch.sigmoid(outputs) > 0.5  # 将输出转换为二进制预测
-        
+```
+
+outputs = model(images)：模型对输入图像进行前向传播，输出 logits（未激活的原始值）。
+
+preds = torch.sigmoid(outputs) > 0.5：
+
+概率转换：通过 Sigmoid 将 logits 映射为概率值（范围 [0, 1]）。
+
+阈值判断：概率 > 0.5 视为正类（是数字8），否则为负类。
+
+
+```
         all_preds.extend(preds.cpu().numpy())
         all_labels.extend(labels.cpu().numpy())
+```
+
+.cpu()：将张量从 GPU 移至 CPU（若模型在 GPU 上运行）。
+
+.numpy()：将张量转换为 NumPy 数组。
+
+extend()：将当前批次的预测和标签添加到全局列表中。
+
+
+
+
 
 # 计算准确率
+
+```
 accuracy = accuracy_score(all_labels, all_preds)
 print(f'Test Accuracy: {accuracy * 100:.2f}%')
 ```
 
 
+第一行：accuracy = accuracy_score(all_labels, all_preds)
 
-代码说明：
-数据预处理：我们使用transforms对图像进行归一化处理。
+​函数作用​：调用 accuracy_score 函数计算模型预测的准确率。这是分类任务中常用的评估指标，表示预测正确的样本占总样本的比例。
 
-模型定义：我们定义了一个简单的CNN模型，包含两个卷积层和两个全连接层。
+​参数解析​：
 
-损失函数：由于这是一个二分类问题（是否为数字8），我们使用BCEWithLogitsLoss作为损失函数。
+- all_labels：真实标签列表或数组，通常从测试数据集的标签中获取。
+- all_preds：模型预测的标签列表或数组，需与真实标签一一对应。
 
-训练过程：我们训练模型5个epoch，并在每个epoch后打印损失。
+​返回值​ accuracy：浮点数（float），取值范围为 [0, 1]，例如 0.95 表示95%的准确率。
 
-测试过程：在测试集上评估模型的准确率。
+​注意事项​
 
-运行结果：
-运行代码后，你将看到每个epoch的损失以及模型在测试集上的准确率。
+- 需确保 all_labels 和 all_preds 的维度一致，否则会报错。
+- 此函数来自 sklearn.metrics 库，需提前导入：from sklearn.metrics import accuracy_score。
 
-注意事项：
-你可以调整模型的超参数（如学习率、批量大小、epoch数等）以获得更好的性能。
+​第二行：print(f'Test Accuracy: {accuracy * 100:.2f}%')
 
-如果你只想识别数字8，可以将标签转换为二进制（1表示8，0表示其他数字）。
+​格式化输出​：使用 f-string（格式化字符串）将准确率转换为百分比形式。
+
+{accuracy * 100:.2f}：将 accuracy 乘以 100 转换为百分比，并通过 :.2f 保留两位小数（例如 95.23%）。
+​功能分解​
+
+- accuracy * 100：将小数形式的准确率转换为百分比（如 0.9523 → 95.23）。
+- :.2f：格式化指令，表示保留两位小数。
+- %：在字符串末尾添加百分号。
+
+​输出示例​
+
+若 accuracy = 0.9523，输出结果为：Test Accuracy: 95.23%。
+
+​代码整体逻辑
+
+- ​计算准确率：通过对比真实标签和预测标签，量化模型性能。
+- ​结果展示：将数值转换为更易读的百分比形式输出。
+
+
