@@ -45,6 +45,9 @@
 - [训练模型](#训练模型)
 - [测试模型](#测试模型)
 - [计算准确率](#计算准确率)
+- [实际运行](#实际运行)
+  - [优化后代码](#优化后代码)
+  - [运行结果](#运行结果)
 
 
 # 数据集
@@ -1009,5 +1012,182 @@ print(f'Test Accuracy: {accuracy * 100:.2f}%')
 
 - ​计算准确率：通过对比真实标签和预测标签，量化模型性能。
 - ​结果展示：将数值转换为更易读的百分比形式输出。
+
+# 实际运行
+
+## 优化后代码
+
+```
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+from sklearn.metrics import accuracy_score
+
+
+
+# 定义数据预处理
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,))
+])
+
+# 加载MNIST数据集
+train_dataset = datasets.MNIST(
+    root='./data', 
+    train=True, 
+    download=True, 
+    transform=transform
+)
+test_dataset = datasets.MNIST(
+    root='./data',
+    train=False,
+    download=True, 
+    transform=transform
+)
+
+# 创建数据加载器
+train_loader = DataLoader(
+    dataset=train_dataset, 
+    batch_size=64, 
+    shuffle=True
+)
+
+test_loader = DataLoader(
+    dataset=test_dataset, 
+    batch_size=1000, 
+    shuffle=False)
+
+
+
+# 定义简单的CNN模型
+# class CNN(nn.Module):
+#     def __init__(self):
+#         super(CNN, self).__init__()
+#         self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1)
+#         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+#         self.fc1 = nn.Linear(64 * 7 * 7, 128)
+#         self.fc2 = nn.Linear(128, 1)  # 输出为1，表示是否为数字8
+        
+#     def forward(self, x):
+#         x = torch.relu(self.conv1(x))
+#         x = torch.max_pool2d(x, 2)
+#         x = torch.relu(self.conv2(x))
+#         x = torch.max_pool2d(x, 2)
+#         x = x.view(x.size(0), -1)  # 展平
+#         x = torch.relu(self.fc1(x))
+#         x = self.fc2(x)        
+#         return x
+
+
+
+# class CNN(nn.Module):
+#     def __init__(self):
+#         super(CNN, self).__init__()
+#         self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1)
+#         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+#         self.fc1 = nn.Linear(64, 128)  # 修正输入维度为 64
+#         self.fc2 = nn.Linear(128, 1)
+#         self.dropout = nn.Dropout(0.5)
+#         self.bn1 = nn.BatchNorm2d(32)
+#         self.gap = nn.AdaptiveAvgPool2d((1, 1))
+
+#     def forward(self, x):
+#         x = torch.relu(self.bn1(self.conv1(x)))
+#         x = torch.max_pool2d(x, 2)
+#         x = torch.relu(self.conv2(x))
+#         x = torch.max_pool2d(x, 2)
+#         x = self.gap(x)
+#         x = x.view(x.size(0), -1)
+#         x = self.dropout(torch.relu(self.fc1(x)))
+#         x = self.fc2(x)
+#         return x
+    
+    
+class CNN(nn.Module):
+    def __init__(self):
+        super(CNN, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+        self.fc1 = nn.Linear(64, 128)  # 输入维度修正为64
+        self.fc2 = nn.Linear(128, 1)
+        self.dropout = nn.Dropout(0.5)
+        self.bn1 = nn.BatchNorm2d(32)
+        self.bn2 = nn.BatchNorm2d(64)  # 新增BN层
+        self.gap = nn.AdaptiveAvgPool2d((1,1))
+
+    def forward(self, x):
+        x = torch.relu(self.bn1(self.conv1(x)))
+        x = torch.max_pool2d(x, kernel_size=2, stride=2)
+        x = torch.relu(self.bn2(self.conv2(x)))  # 添加BN和ReLU
+        x = torch.max_pool2d(x, kernel_size=2, stride=2)
+        x = self.gap(x)
+        x = x.view(x.size(0), -1)
+        x = self.dropout(torch.relu(self.fc1(x)))
+        x = self.fc2(x)
+        return torch.sigmoid(x)  # 添加Sigmoid
+    
+    
+    
+
+    
+    
+# 初始化模型、损失函数和优化器
+model = CNN()
+
+criterion = nn.BCEWithLogitsLoss()  # 二分类交叉熵损失
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# 训练模型
+num_epochs = 10
+for epoch in range(num_epochs):
+    model.train()
+    for images, labels in train_loader:
+        # 将标签转换为二进制：1表示数字8，0表示其他数字
+        labels = (labels == 8).float().view(-1, 1)
+        
+        # 前向传播
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+        
+        # 反向传播和优化
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+    
+    print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+
+# 测试模型
+model.eval()
+all_preds = []
+all_labels = []
+with torch.no_grad():
+    for images, labels in test_loader:
+        # 将标签转换为二进制
+        labels = (labels == 8).float().view(-1, 1)
+        
+        outputs = model(images)
+        preds = torch.sigmoid(outputs) > 0.5  # 将输出转换为二进制预测
+        
+        all_preds.extend(preds.cpu().numpy())
+        all_labels.extend(labels.cpu().numpy())
+
+# 计算准确率
+accuracy = accuracy_score(all_labels, all_preds)
+print(f'Test Accuracy: {accuracy * 100:.2f}%')
+
+
+# 保存模型
+torch.save(model.state_dict(), "mnist_relu_model.pth")
+```
+
+## 运行结果
+
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital8recog.jpg"></div>
+
+
+显然增加训练次数并不会显著提高识别成功率
+
 
 
