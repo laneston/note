@@ -6,7 +6,7 @@
 
 
 
-
+# 神经网络模型示例
 
 ```
 class DigitRecognizer(nn.Module):
@@ -34,14 +34,12 @@ class DigitRecognizer(nn.Module):
         return nn.functional.log_softmax(x, dim=1)
 ```
 
+
+
 这个DigitRecognizer类是一个用于手写数字识别的卷积神经网络（CNN）模型，专为处理类似MNIST这样的28x28像素灰度图像设计。以下是其核心作用及结构分析：
 
 
-
-
-
-1. super() 的作用
-Python 2 vs Python 3
+## super() 的作用
 
 Python 2：需显式传递子类名和实例，即 super(子类名, self)。
 
