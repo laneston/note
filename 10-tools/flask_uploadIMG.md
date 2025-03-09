@@ -7,6 +7,7 @@
   - [核心路由逻辑](#核心路由逻辑)
   - [运行配置](#运行配置)
 - [emplates/upload.html](#emplatesuploadhtml)
+- [运行](#运行)
 
 
 
@@ -176,4 +177,17 @@ if __name__ == '__main__':
     </script>
 </body>
 </html>
+```
+
+# 运行
+
+**推荐使用虚拟环境隔离项目依赖**
+
+```
+python -m venv venv
+# macOS/Linux
+source venv/bin/activate  
+# Windows
+venv\Scripts\activate
+pip install flask
 ```
