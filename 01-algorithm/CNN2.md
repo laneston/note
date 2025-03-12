@@ -24,6 +24,11 @@
     - [功能作用](#功能作用)
     - [设计意义](#设计意义-1)
   - [激活与输出](#激活与输出)
+- [案例结果](#案例结果)
+  - [输入](#输入)
+  - [输出](#输出)
+  - [输入](#输入-1)
+  - [输出](#输出-1)
 
 
 
@@ -387,10 +392,23 @@ nn.Linear 的原理是通过线性变换（矩阵乘法 + 偏置）实现特征�
 原理参考[激活函数ReLU的原理与应用](https://github.com/laneston/note/blob/main/01-algorithm/ReLU.md)
 
 
+# 案例结果
 
+## 输入
 
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/nums.jpg"></div>
 
+## 输出
 
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_nums.jpg"></div>
+
+## 输入
+
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/numa.jpg"></div>
+
+## 输出
+
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_numa.jpg"></div>
 
 
 
