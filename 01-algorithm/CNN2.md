@@ -396,21 +396,21 @@ nn.Linear 的原理是通过线性变换（矩阵乘法 + 偏置）实现特征�
 
 ## 输入
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/nums.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/nums.jpg" width="50%"></div>
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/numa.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/numa.jpg" width="50%"></div>
 
 ## 训练5轮模型识别效果
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_nums.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_nums.jpg width="50%""></div>
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_numa.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_numa.jpg" width="50%"></div>
 
 ## 训练15轮模型识别效果
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_nums15.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_nums15.jpg" width="50%"></div>
 
-<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_numa15.jpg"></div>
+<div align="center"><img src="https://github.com/laneston/note/blob/main/00-img/Post-tensor/digital_numa15.jpg" width="50%"></div>
 
 ## 结论
 
